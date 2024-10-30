@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: ./src/Frontend  
+      dockerfile: Dockerfile    
+    ports:
+      - "3000:3000"
+    
+    depends_on:
+      - api
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: RED_SOCIAL
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ./src/backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+      - "8001:8001"  # Mapea el puerto del contenedor al puerto de tu máquina
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      NODE_ENV: development
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
