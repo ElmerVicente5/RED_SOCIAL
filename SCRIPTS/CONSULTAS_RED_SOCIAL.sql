@@ -77,3 +77,39 @@ knex('comments')
   })
   .then(() => console.log("Comentario insertado"))
   .catch(error => console.error(error));
+
+
+--CONSULTA PARA OBTENER TODOS LOS POST DE MIS AMIGOS Y MIOS
+SELECT p.post_id, p.user_id, p.contenido_texto, p.contenido_url, p.fecha_creacion
+FROM posts p
+WHERE p.user_id = #USER_ID
+   OR p.user_id IN (
+       SELECT friend_user_id 
+       FROM friends 
+       WHERE user_id = #USER_ID AND estado = 'aceptado'
+       UNION
+       SELECT user_id 
+       FROM friends 
+       WHERE friend_user_id = #USER_ID AND estado = 'aceptado'
+   )
+ORDER BY p.fecha_creacion DESC;
+
+
+knex('posts')
+  .select('posts.post_id', 'posts.user_id', 'posts.contenido_texto', 'posts.contenido_url', 'posts.fecha_creacion')
+  .where('posts.user_id', MY_USER_ID)
+  .orWhereIn('posts.user_id', function() {
+    this.select('friend_user_id')
+      .from('friends')
+      .where('user_id', MY_USER_ID)
+      .andWhere('estado', 'aceptado')
+      .unionAll([
+        knex.select('user_id')
+          .from('friends')
+          .where('friend_user_id', MY_USER_ID)
+          .andWhere('estado', 'aceptado')
+      ]);
+  })
+  .orderBy('posts.fecha_creacion', 'desc')
+  .then(posts => console.log(posts))
+  .catch(error => console.error(error));
