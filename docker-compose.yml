@@ -1,16 +1,6 @@
 version: '3'
 
 services:
-  web:
-    build:
-      context: ./src/Frontend  
-      dockerfile: Dockerfile    
-    ports:
-      - "3000:3000"
-    
-    depends_on:
-      - api
-
   db:
     image: postgres:15
     environment:
