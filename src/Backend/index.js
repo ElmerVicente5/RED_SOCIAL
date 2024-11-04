@@ -17,14 +17,14 @@ const app = express();
 const server = http.createServer(app); 
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:3000',
+        origin: 'http://localhost:3001',
         methods: ['GET', 'POST'],
         credentials: true
     }
 }); 
 
 app.use(cors({
-    origin: 'http://localhost:3000', // Cambia esto si es necesario
+    origin: 'http://localhost:3001', // Cambia esto si es necesario
     methods: ['GET', 'POST'],
     credentials: true
 }));
