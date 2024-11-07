@@ -3,7 +3,7 @@ import { db } from '../database/conexion.database.js';
 
 // Función para insertar una nueva publicación
 const crearPublicacion = async (user_id, contenido_texto, contenido_url) => {
-  const [post] = await db('posts')
+  const [post] = await db('posts')  
     .insert({
       user_id,
       contenido_texto,
@@ -69,6 +69,7 @@ const listarComentariosPorPost = async (post_id) => {
 };
 
 // Función para darle "me gusta" a una publicación
+// Función para alternar "me gusta" en una publicación
 const darMeGusta = async (post_id, user_id) => {
   // Verificar si el usuario ya dio "me gusta" a la publicación
   const existeReaccion = await db('reactions')
@@ -76,17 +77,22 @@ const darMeGusta = async (post_id, user_id) => {
     .first();
 
   if (existeReaccion) {
-    throw new Error('Ya has dado "me gusta" a esta publicación');
+    // Si ya existe, elimina el "me gusta"
+    await db('reactions')
+      .where({ reaction_id: existeReaccion.reaction_id })
+      .del();
+    return { message: 'Me gusta eliminado exitosamente' };
+  } else {
+    // Si no existe, añade un "me gusta"
+    const [reaccion] = await db('reactions')
+      .insert({
+        post_id,
+        user_id,
+        tipo: 'me gusta',
+      })
+      .returning('*'); // Retorna la reacción insertada
+    return { message: 'Me gusta añadido exitosamente', reaccion };
   }
-
-  const [reaccion] = await db('reactions')
-    .insert({
-      post_id,
-      user_id,
-      tipo: 'me gusta',
-    })
-    .returning('*'); // Retorna la reacción insertada
-  return reaccion;
 };
 
 
@@ -146,7 +152,14 @@ const listarPublicacionesDeUsuarioYAmigos = async (user_id) => {
         'posts.contenido_url',
         'posts.fecha_creacion',
         db.raw('COUNT(DISTINCT reactions.reaction_id) as num_me_gusta'),
-        db.raw('COUNT(DISTINCT comments.comment_id) as num_comentarios')
+        db.raw('COUNT(DISTINCT comments.comment_id) as num_comentarios'),
+        // Subconsulta para verificar si el usuario ya dio "me gusta" a esta publicación
+        db.raw(`EXISTS (
+          SELECT 1 FROM reactions AS r 
+          WHERE r.post_id = posts.post_id 
+          AND r.user_id = ? 
+          AND r.tipo = 'me gusta'
+        ) as has_liked`, [user_id])  // Indicador de "me gusta"
       )
       .groupBy(
         'posts.post_id',

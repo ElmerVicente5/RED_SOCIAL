@@ -96,7 +96,7 @@ const agregarComentario = async (req, res) => {
 // Controlador para obtener todos los comentarios de una publicación
 const obtenerComentariosPorPost = async (req, res) => {
   const { post_id } = req.body; // Obtener post_id de los parámetros de la solicitud
-
+console.log("post id:", post_id);
   try {
     const comentarios = await PostModel.listarComentariosPorPost(post_id);
     res.status(200).json({
