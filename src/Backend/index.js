@@ -12,22 +12,30 @@ import postRouter from './routes/posts.route.js';
 import FriendRouter from './routes/friends.route.js';
 import chatRouter from './routes/chat.route.js';
 import socketService from './services/socket.service.js'; 
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 const server = http.createServer(app); 
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:3001',
+        origin: 'http://localhost:3000',
         methods: ['GET', 'POST'],
         credentials: true
     }
 }); 
 
 app.use(cors({
-    origin: 'http://localhost:3001', // Cambia esto si es necesario
+    origin: 'http://localhost:3000', // Cambia esto si es necesario
     methods: ['GET', 'POST'],
     credentials: true
 }));
+
+// Obtiene el directorio actual del archivo
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+// Usar __dirname en tu ruta
+app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

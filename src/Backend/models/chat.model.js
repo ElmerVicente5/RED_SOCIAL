@@ -11,6 +11,7 @@ const Chat = {
         const result = await db('chats').insert({ user1_id: user1Id, user2_id: user2Id });
         const chatId = result.id; // Ajusta esto según la estructura del objeto devuelto
         chat = { chat_id: chatId, user1_id: user1Id, user2_id: user2Id };
+        console.log("creando chat", chat);
       }
       return chat;
     },

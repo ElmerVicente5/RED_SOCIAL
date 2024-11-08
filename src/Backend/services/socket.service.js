@@ -20,18 +20,25 @@ export default function socketService(io) {
             }
         };
 
-        // Evento para iniciar un chat
         socket.on('iniciar_chat', async ({ friendUserId }) => {
             try {
+                console.log(`Iniciando chat con: ${friendUserId} y usuario principal: ${socket.userId}`);
                 const chat = await ChatModel.Chat.findOrCreateChat(socket.userId, friendUserId);
                 socket.join(`chat_${chat.chat_id}`);
+                console.log(`Chat iniciado: ${chat.chat_id}`);  
                 io.to(`chat_${chat.chat_id}`).emit('chat_iniciado', chat.chat_id);
+                
+                // Envía el chatId al socket que lo solicitó
+                socket.emit('chat_iniciado', chat.chat_id); // Emitir al usuario que inició el chat
+        
+                // Llama a la callback para pasar el chatId
+                socket.emit('iniciar_chat', chat.chat_id); // Aquí se pasa el chatId a la callback de la UI
+        
                 await loadMessages(chat.chat_id); // Cargar mensajes después de iniciar el chat
             } catch (error) {
                 console.error('Error al iniciar el chat:', error);
             }
         });
-
         // Evento para enviar un mensaje
         socket.on('enviar_mensaje', async ({ chatId, contenido }) => {
             try {

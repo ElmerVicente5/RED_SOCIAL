@@ -50,9 +50,42 @@ const actualizarPassword = async (userId, nuevaPassword) => {
   return usuarioActualizado;
 };
 
-const obtenerUsuarios = async () => {
+const obtenerUsuarios = async (userId) => {
   const usuarios = await db('users')
-      .select('user_id', 'nombre'); // Seleccionar solo el ID y nombre de los usuarios
+    .select(
+      'users.user_id',
+      'users.foto_perfil',
+      'users.nombre',
+      'friends.estado as estado_solicitud'
+    )
+    .leftJoin('friends', function() {
+      this.on(function() {
+        this.on('friends.friend_user_id', '=', 'users.user_id')
+          .andOn('friends.user_id', '=', db.raw('?', [userId]));
+      })
+      .orOn(function() {
+        this.on('friends.user_id', '=', 'users.user_id')
+          .andOn('friends.friend_user_id', '=', db.raw('?', [userId]));
+      });
+    })
+    .whereNot('users.user_id', userId) // Excluir al usuario actual
+    .where(function() {
+      this.whereNull('friends.estado') // No hay relación de amistad
+        .orWhere('friends.estado', 'pendiente'); // O tiene solicitud pendiente
+    })
+    .whereNotIn('users.user_id', function() { // Subconsulta para excluir amigos confirmados
+      this.select(db.raw(`CASE 
+                            WHEN friends.user_id = ? THEN friends.friend_user_id 
+                            ELSE friends.user_id 
+                          END`, [userId]))
+        .from('friends')
+        .where(function() {
+          this.where('friends.user_id', userId)
+            .orWhere('friends.friend_user_id', userId);
+        })
+        .andWhere('friends.estado', 'aceptado'); // Excluir amigos aceptados
+    });
+
   return usuarios;
 };
 

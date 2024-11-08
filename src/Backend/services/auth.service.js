@@ -89,8 +89,8 @@ class AuthService {
 
         return { message: "Contraseña actualizada con éxito" };
     }
-    async obtenerUsuarios() {
-        const usuarios = await UsuarioModel.obtenerUsuarios();
+    async obtenerUsuarios(userId) {
+        const usuarios = await UsuarioModel.obtenerUsuarios(userId);
         return usuarios;
     }
 }

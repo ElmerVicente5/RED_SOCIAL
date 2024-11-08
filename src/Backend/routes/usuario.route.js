@@ -4,7 +4,24 @@ import { verificarToken, verificarAdmin } from '../middlewares/auth.js'; // Aseg
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import { config } from '../config/config.js';
+import multer from 'multer';
 const router = Router();
+
+// Configuración de multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+const upload = multer({ storage: storage });
+
+// Ruta para cargar imagen de perfil
+router.post('/cargar-imagen', verificarToken, upload.single('imagen'), UsuarioController.cargarImagen);
+
+
 
 // Ruta para registrar un usuario (sin autenticación)
 router.post('/registrar', UsuarioController.registrarUsuario); // Cambiado a registrarUsuario

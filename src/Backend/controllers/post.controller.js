@@ -3,11 +3,18 @@ import { PostModel } from '../models/posts.model.js';
 
 // Controlador para crear una nueva publicación
 const crearPublicacion = async (req, res) => {
-  const user_id=req.userId;
+  const user_id = req.userId;
   const { contenido_texto, contenido_url } = req.body;
+  console.log("contenido_texto",contenido_texto);
+  console.log("contenido_url",contenido_url);
+
+  
+  // Verificar si hay una imagen y obtener su ruta
+  const imagen = req.file ? req.file.path : null;
+  console.log("imagen",imagen);
 
   try {
-    const nuevaPublicacion = await PostModel.crearPublicacion(user_id, contenido_texto, contenido_url);
+    const nuevaPublicacion = await PostModel.crearPublicacion(user_id, contenido_texto, imagen);
     res.status(201).json({
       message: 'Publicación creada exitosamente',
       publicacion: nuevaPublicacion,

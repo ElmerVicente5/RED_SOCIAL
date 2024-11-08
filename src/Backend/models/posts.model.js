@@ -15,26 +15,36 @@ const crearPublicacion = async (user_id, contenido_texto, contenido_url) => {
 
 // Función para listar todas las publicaciones
 const listarPublicaciones = async () => {
-  const publicaciones = await db('posts')
-    .join('users', 'posts.user_id', '=', 'users.user_id')
-    .leftJoin('reactions', function() {
-      this.on('posts.post_id', '=', 'reactions.post_id')
-        .andOn('reactions.tipo', '=', db.raw('?', ['me gusta'])); // Solo contar "me gusta"
-    })
-    .leftJoin('comments', 'posts.post_id', '=', 'comments.post_id') // Para contar los comentarios
-    .select(
-      'posts.post_id',
-      'users.nombre as autor',
-      'posts.contenido_texto',
-      'posts.contenido_url',
-      'posts.fecha_creacion',
-      db.raw('COUNT(DISTINCT reactions.reaction_id) as num_me_gusta'), // Conteo de reacciones "me gusta"
-      db.raw('COUNT(DISTINCT comments.comment_id) as num_comentarios') // Conteo de comentarios
-    )
-    .groupBy('posts.post_id', 'users.nombre', 'posts.contenido_texto', 'posts.contenido_url', 'posts.fecha_creacion')
-    .orderBy('posts.fecha_creacion', 'desc'); // Ordenar por fecha de creación
-  
-  return publicaciones;
+  try {
+    const publicaciones = await db('posts')
+      .join('users', 'posts.user_id', '=', 'users.user_id') // Añadir join con users
+      .leftJoin('reactions', function() {
+        this.on('posts.post_id', '=', 'reactions.post_id')
+          .andOn('reactions.tipo', '=', db.raw('?', ['me gusta']));
+      })
+      .leftJoin('comments', 'posts.post_id', '=', 'comments.post_id')
+      .select(
+        'posts.post_id',
+        'users.foto_perfil', // Añadir foto_perfil
+        'posts.contenido_texto',
+        'posts.contenido_url',
+        'posts.fecha_creacion',
+        db.raw('COUNT(DISTINCT reactions.reaction_id) as num_me_gusta'),
+        db.raw('COUNT(DISTINCT comments.comment_id) as num_comentarios')
+      )
+      .groupBy(
+        'posts.post_id',
+        'users.foto_perfil', // Incluir en el groupBy
+        'posts.contenido_texto',
+        'posts.contenido_url',
+        'posts.fecha_creacion'
+      )
+      .orderBy('posts.fecha_creacion', 'desc');
+    
+    return publicaciones;
+  } catch (error) {
+    throw new Error('Error al obtener las publicaciones');
+  }
 };
 // Función para agregar un comentario a una publicación
 const agregarComentario = async (post_id, user_id, contenido) => {
@@ -56,6 +66,7 @@ const listarComentariosPorPost = async (post_id) => {
       .select(
         'comments.comment_id',
         'users.nombre as usuario',
+        'users.foto_perfil as foto_perfil',
         'comments.contenido',
         'comments.fecha_creacion'
       )
@@ -100,22 +111,30 @@ const darMeGusta = async (post_id, user_id) => {
 const listarPublicacionesPorUsuario = async (user_id) => {
   try {
     const publicaciones = await db('posts')
+      .join('users', 'posts.user_id', '=', 'users.user_id') // Añadir join con users
       .leftJoin('reactions', function() {
         this.on('posts.post_id', '=', 'reactions.post_id')
-          .andOn('reactions.tipo', '=', db.raw('?', ['me gusta'])); // Solo contar "me gusta"
+          .andOn('reactions.tipo', '=', db.raw('?', ['me gusta']));
       })
-      .leftJoin('comments', 'posts.post_id', '=', 'comments.post_id') // Para contar los comentarios
+      .leftJoin('comments', 'posts.post_id', '=', 'comments.post_id')
       .select(
         'posts.post_id',
+        'users.foto_perfil', // Añadir foto_perfil
         'posts.contenido_texto',
         'posts.contenido_url',
         'posts.fecha_creacion',
-        db.raw('COUNT(DISTINCT reactions.reaction_id) as num_me_gusta'), // Conteo de reacciones "me gusta"
-        db.raw('COUNT(DISTINCT comments.comment_id) as num_comentarios') // Conteo de comentarios
+        db.raw('COUNT(DISTINCT reactions.reaction_id) as num_me_gusta'),
+        db.raw('COUNT(DISTINCT comments.comment_id) as num_comentarios')
       )
       .where('posts.user_id', user_id)
-      .groupBy('posts.post_id', 'posts.contenido_texto', 'posts.contenido_url', 'posts.fecha_creacion')
-      .orderBy('posts.fecha_creacion', 'desc'); // Ordenar por fecha de creación
+      .groupBy(
+        'posts.post_id',
+        'users.foto_perfil', // Incluir en el groupBy
+        'posts.contenido_texto',
+        'posts.contenido_url',
+        'posts.fecha_creacion'
+      )
+      .orderBy('posts.fecha_creacion', 'desc');
     
     return publicaciones;
   } catch (error) {
@@ -148,6 +167,7 @@ const listarPublicacionesDeUsuarioYAmigos = async (user_id) => {
       .select(
         'posts.post_id',
         'users.nombre as autor',
+        'users.foto_perfil as foto_perfil',
         'posts.contenido_texto',
         'posts.contenido_url',
         'posts.fecha_creacion',
@@ -164,6 +184,7 @@ const listarPublicacionesDeUsuarioYAmigos = async (user_id) => {
       .groupBy(
         'posts.post_id',
         'users.nombre',
+        'users.foto_perfil',
         'posts.contenido_texto',
         'posts.contenido_url',
         'posts.fecha_creacion'

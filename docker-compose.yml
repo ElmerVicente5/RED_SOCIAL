@@ -18,12 +18,14 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
-      - "8001:8001"  # Mapea el puerto del contenedor al puerto de tu máquina
+      - "8001:8001"
     environment:
       DATABASE_URL: ${DATABASE_URL}
       NODE_ENV: development
     depends_on:
       - db
+    volumes:
+      - ./src/Backend/public/uploads:/app/public/uploads  # Mapea la carpeta de imágenes del host al contenedor
 
 volumes:
   postgres_data:

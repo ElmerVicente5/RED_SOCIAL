@@ -92,7 +92,7 @@ const actualizarPerfil = async (req, res) => {
     await body('email').optional().isEmail().run(req);
     await body('ciudad').optional().isString().run(req);
     await body('fechaNacimiento').optional().isDate().run(req);
-    await body('fotoPerfil').optional().isString().run(req);
+    await body('foto_perfil').optional().isString().run(req);
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -100,13 +100,37 @@ const actualizarPerfil = async (req, res) => {
     }
 
     try {
-        const { nombre, email, ciudad, fechaNacimiento, fotoPerfil } = req.body;
-        const usuarioActualizado = await authService.actualizarUsuario(userId, { nombre, email, ciudad, fechaNacimiento, fotoPerfil });
+        const { nombre, email, ciudad, fechaNacimiento, foto_perfil } = req.body;
+        const usuarioActualizado = await authService.actualizarUsuario(userId, { nombre, email, ciudad, fechaNacimiento, foto_perfil });
 
         return res.status(200).json({ message: "Perfil actualizado con éxito", usuarioActualizado });
     } catch (error) {
         console.error("Error al actualizar el perfil:", error);
         res.status(500).json({ message: "Error al actualizar el perfil" });
+    }
+};
+
+
+const cargarImagen = async (req, res) => {
+    try {
+        console.log("obteniendo imagen");
+        if (!req.file) {
+            return res.status(400).json({ message: "No se ha proporcionado ninguna imagen" });
+        }
+
+        const rutaImagen = req.file.path; // La ruta donde se guardó la imagen
+        const userId = req.userId; // Obtiene el ID del usuario desde el token
+
+        // Guarda la ruta de la imagen en la base de datos usando authService
+        const usuarioActualizado = await authService.actualizarUsuario(userId, { foto_perfil: rutaImagen });
+
+        return res.status(200).json({
+            message: "Imagen cargada exitosamente",
+            usuarioActualizado
+        });
+    } catch (error) {
+        console.error("Error al cargar la imagen:", error);
+        res.status(500).json({ message: "Error al cargar la imagen" });
     }
 };
 
@@ -138,8 +162,9 @@ const cambiarContrasena = async (req, res) => {
 
 // api/usuario/obtener-usuarios
 const obtenerUsuarios = async (req, res) => {
+    const userId = req.userId;
     try {
-        const usuarios = await authService.obtenerUsuarios();
+        const usuarios = await authService.obtenerUsuarios(userId);
         return res.status(200).json({ usuarios });
     } catch (error) {
         console.error("Error al obtener usuarios:", error);
@@ -154,5 +179,6 @@ export const UsuarioController = {
     verPerfil,
     actualizarPerfil,
     cambiarContrasena,
-    obtenerUsuarios
+    obtenerUsuarios,
+    cargarImagen
 };
