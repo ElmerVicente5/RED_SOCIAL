@@ -24,7 +24,7 @@ services:
 
   api:
     build:
-      context: ./src/backend
+      context: ./src/Backend
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
