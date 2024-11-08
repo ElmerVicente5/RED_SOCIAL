@@ -18,7 +18,7 @@ import Comments from '../Comments/Comments';
 import { API_URL } from '../../config/config';
 
 const axiosInstance = axios.create({
-  baseURL: `${API_URL}api/post`,
+  baseURL: `${API_URL}/api/post`,
   headers: {
     'Authorization': `Bearer ${localStorage.getItem('token')}`
   }
@@ -51,7 +51,7 @@ const Post = ({ post, posts, setPosts, setFriendsProfile, images }) => {
         id: cmt.comment_id,
         username: cmt.usuario,
         comment: cmt.contenido,
-        profilePic: cmt.foto_perfil ?  `${API_URL}${cmt.foto_perfil}`: Profile, // Si no tienes imagen de perfil, puedes agregar una predeterminada
+        profilePic: cmt.foto_perfil ?  `${API_URL}/${cmt.foto_perfil}`: Profile, // Si no tienes imagen de perfil, puedes agregar una predeterminada
         time: moment.utc(cmt.fecha_creacion).local().startOf('seconds').fromNow()
       }));
   
