@@ -8,7 +8,7 @@ import {LiaUserFriendsSolid} from "react-icons/lia"
 import {IoNotificationsOutline} from "react-icons/io5"
 import {TbMessage} from "react-icons/tb"
 
-import Profile from "../../assets/profile.jpg"
+import Profile from "../../assets/Suggestion/avatar1.png"
 
 const Nav = ({search,setSearch,setShowMenu,profileImg}) => {
 

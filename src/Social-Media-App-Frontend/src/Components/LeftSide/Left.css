@@ -27,14 +27,14 @@
     margin-left: -10px;
 }
 #L-box:hover{
-    background-color: rgb(232, 129, 91);
+    background-color: rgb(18, 158, 233);
     transition: .4s;
     cursor: pointer;
     color: #fff;
 }
 #L-box.active{
     font-weight: 500;
-    background: linear-gradient(107deg, rgb(255, 67, 5) 11.1%, rgb(245, 135, 0) 95.3%);
+    background: linear-gradient(107deg, rgb(5, 238, 255) 11.1%, rgb(42, 180, 223) 95.3%);
     color: #fff;
 }
 #L-box.active p{
@@ -52,7 +52,7 @@
     font-size: 12px;
     width: 20px;
     height: 20px;
-    background-color:orangered;
+    background-color:rgb(11, 131, 171);
     color: #fff;
     border-radius: 50px;
     display: flex;

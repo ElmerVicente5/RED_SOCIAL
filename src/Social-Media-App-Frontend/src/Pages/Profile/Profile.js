@@ -4,7 +4,7 @@ import ProfileMiddle from '../../Components/Profile/ProfileMiddle';
 import Right from '../../Components/RightSide/Right';
 import Nav from '../../Components/Navigation/Nav';
 import "../Profile/Profile.css";
-import ProfileImg from "../../assets/profile.jpg";
+import ProfileImg from "../../assets/Suggestion/avatar1.png";
 import { API_URL } from '../../config/config';
 const Profile = () => {
   const [following, setFollowing] = useState(3);

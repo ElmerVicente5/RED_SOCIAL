@@ -41,6 +41,7 @@ const Info = ({
             const imgObj = { image: URL.createObjectURL(img) };
             setProfileImg(imgObj.image); // Mostramos la imagen seleccionada en el perfil
             console.log("Imagen de perfil seleccionada:", img);
+            //handleUpload(); // Subimos la imagen al servidor
         }
     };
 
@@ -137,7 +138,7 @@ const Info = ({
                 style={{ display: "none" }}
             />
 
-            <button onClick={handleUpload}>Subir Imagen</button>
+            {/*<button onClick={handleUpload}>Subir Imagen</button>*/}
 
             <div className="info-follow">
                 <h1>{modelDetails.ModelName}</h1>
@@ -147,9 +148,8 @@ const Info = ({
                     <BiLogOut />Logout
                 </Link>
 
-                <button onClick={() => setOpenEdit(true)}>
-                    <LiaEdit /> Edit Profile
-                </button>
+
+                <button onClick={handleUpload}>Subir Imagen</button>
                 <ModelProfile
                     name={name}
                     setName={setName}

@@ -9,7 +9,7 @@ import {RiFileListLine} from "react-icons/ri"
 import {FiSettings} from "react-icons/fi"
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
-import Profile from "../../assets/profile.jpg"
+import Profile from "../../assets/Suggestion/avatar1.png"
 
 
 const Left = ({profileImg,

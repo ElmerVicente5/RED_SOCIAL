@@ -35,32 +35,7 @@ import moment from 'moment';
 
 const PostUser = ({posts,post,setPosts,profileImg,modelDetails,images}) => {
 
-  const [comments,setComments] =useState([
-    {
-        id:1,
-        profilePic:img1,
-        likes:23,
-        username:"Violet",
-        time:"3 Hours Ago",
-        comment:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse asperiores debitis saepe itaque, eligendi quasi laboriosam vitae voluptatem animi maiores voluptatibus."
-    },
-    {
-        id:2,
-        profilePic:img2,
-        likes:5,
-        username:"Brandon",
-        time:"1 Hour Ago",
-        comment:"Lorem ipsum dolor sit amet consectetur adipisicing elit."
-    },
-    {
-        id:3,
-        profilePic:img3,
-        likes:50,
-        username:"Lilly",
-        time:"30 Mins Ago",
-        comment:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse asperiores debitis saepe itaque, eligendi quasi"
-    }
-])
+  const [comments,setComments] =useState([])
 
 
 

@@ -71,8 +71,8 @@ const Login = () => {
         <div className="container">
             <div className="container-form">
                 <form onSubmit={handleSignUp}>
-                    <h1>Login</h1>
-                    <p>Please sign in to continue.</p>
+                    <h1>Login Mondi</h1>
+                    <p> Welcome Please sign in to continue.</p>
                     <div className="inputBox">
                         <FiMail className='mail' />
                         <input 

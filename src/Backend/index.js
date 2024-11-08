@@ -15,8 +15,8 @@ import socketService from './services/socket.service.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-const IP_ADDRESS = '20.3.250.158';
-//const IP_ADDRESS = 'localhost';
+//const IP_ADDRESS = '20.3.250.158';
+const IP_ADDRESS = 'localhost';
 
 const app = express();
 const server = http.createServer(app); 
