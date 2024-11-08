@@ -48,7 +48,7 @@ const SignUp = () => {
                 setApiResponse(result.message); // Save API response message
                 if (response.ok) {
                     // Navigate to home if registration is successful
-                    navigate("/home");
+                    navigate("/");
                 } else {
                     // Handle errors from the API (e.g., email already in use)
                     setError({ apiError: result.message });
