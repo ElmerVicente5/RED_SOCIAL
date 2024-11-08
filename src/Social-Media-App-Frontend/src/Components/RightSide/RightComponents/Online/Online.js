@@ -3,7 +3,7 @@ import axios from 'axios'
 import "../Online/Online.css"
 import OnlineList from './OnlineList'
 import Simg1 from "../../../../assets/Suggestion/avatar1.png"
-
+import { API_URL } from '../../../../config/config'
 const Online = () => {
   const [amigos, setAmigos] = useState([])  // Estado para almacenar los amigos
   const [error, setError] = useState(null)   // Estado para manejar errores
@@ -14,7 +14,7 @@ const Online = () => {
         const token = localStorage.getItem('token')  // Obtén el token del almacenamiento local
 
         // Realiza la solicitud a la API para obtener los amigos
-        const response = await axios.get('http://localhost:8000/api/amigos/listarAmigos', {
+        const response = await axios.get(`${API_URL}/api/amigos/listarAmigos`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -41,7 +41,7 @@ const Online = () => {
           <OnlineList 
             key={amigo.amigo_id} 
             value={{
-              profilepicture: amigo.foto_perfil ? `http://localhost:8000/${amigo.foto_perfil}` :`${Simg1}`, // Imagen predeterminada
+              profilepicture: amigo.foto_perfil ? `${API_URL}/${amigo.foto_perfil}` :`${Simg1}`, // Imagen predeterminada
               username: amigo.nombre,
               userId: amigo.amigo_id
             }}

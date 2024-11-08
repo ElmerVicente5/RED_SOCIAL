@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Simg1 from "../../../../assets/Suggestion/avatar1.png";  // Imagen predeterminada
 import "../Suggestion/Sugg.css";
 import axios from 'axios';
+import { API_URL } from '../../../../config/config';
 
 const Sugg = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -12,7 +13,7 @@ const Sugg = () => {
     const fetchUsuarios = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:8000/api/usuario/usuarios', {
+        const response = await axios.get(`${API_URL}/api/usuario/usuarios`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -31,7 +32,7 @@ const Sugg = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'http://localhost:8000/api/amigos/solicitar',
+        `${API_URL}/api/amigos/solicitar`,
         { friendUserId },
         {
           headers: {
@@ -64,7 +65,7 @@ const Sugg = () => {
         usuarios.map((usuario) => {
           // Construir la URL completa de la imagen
           const fotoPerfil = usuario.foto_perfil
-            ? `http://localhost:8000/${usuario.foto_perfil}`  // Aquí aseguramos que la ruta sea válida
+            ? `${API_URL}/${usuario.foto_perfil}`  // Aquí aseguramos que la ruta sea válida
             : Simg1;  // Imagen predeterminada si no hay foto_perfil
 
           return (

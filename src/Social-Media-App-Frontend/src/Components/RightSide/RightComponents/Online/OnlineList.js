@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaRegCommentDots } from 'react-icons/fa';
 import { io } from 'socket.io-client';
+import { API_URL } from '../../../../config/config';
 
 const OnlineList = ({ value }) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -8,11 +9,12 @@ const OnlineList = ({ value }) => {
   const [chatMessages, setChatMessages] = useState([]);
   const [socket, setSocket] = useState(null);
   const [chatId, setChatId] = useState(null);
-  const currentUser = "TuNombre"; // Cambia este valor según el nombre del usuario actual
+  const currentUser = "TuNombre"; // 
+  
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const newSocket = io('http://localhost:8000', {
+    const newSocket = io(`${API_URL}`, {
       auth: { token },
     });
 

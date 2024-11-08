@@ -4,6 +4,7 @@ import { RiLockPasswordLine } from "react-icons/ri"
 import "../RegisterPage/RegisterPage.css"
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios' // Importa axios si lo usas
+import { API_URL } from '../../config/config'
 
 const Login = () => {
     const navigate = useNavigate()
@@ -27,7 +28,7 @@ const Login = () => {
 
         if (Object.keys(validationLogin(data)).length === 0) {
             try {
-                const response = await axios.post('http://localhost:8000/api/usuario/login', data)
+                const response = await axios.post(`${API_URL}/api/usuario/login`, data)
                 
                 // Guarda el token en localStorage
                 localStorage.setItem('token', response.data.token)

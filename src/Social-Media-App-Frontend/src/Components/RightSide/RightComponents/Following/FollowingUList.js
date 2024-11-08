@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios';
 import Simg1 from "../../../../assets/Suggestion/avatar1.png"
+import { API_URL } from '../../../../config/config';
 
 const FollowingUList = ({ data, following, setFollowing }) => {
   const [status, setStatus] = useState("Aceptar"); // Estado para manejar el texto del botón
@@ -9,7 +10,7 @@ const FollowingUList = ({ data, following, setFollowing }) => {
   const handleResponse = async (estado) => {
     try {
       const token = localStorage.getItem('token'); // Obtén el token del almacenamiento local
-      const response = await axios.post('http://localhost:8000/api/amigos/estadoSolicitud', {
+      const response = await axios.post(`${API_URL}/api/amigos/estadoSolicitud`, {
         solicitudId: data.friend_id, // Usa el id de la solicitud
         estado: estado // Estado a enviar (aceptado o rechazado)
       }, {
@@ -38,7 +39,7 @@ const FollowingUList = ({ data, following, setFollowing }) => {
   return (
     <div className="following-people">
       <div className="following-details">
-        <img src={data.foto_perfil ? `http://localhost:8000/${data.foto_perfil}`: `${Simg1}`} alt="" /> {/* Imagen por defecto si es necesario */}
+        <img src={data.foto_perfil ? `${API_URL}/${data.foto_perfil}`: `${Simg1}`} alt="" /> {/* Imagen por defecto si es necesario */}
         <div className="following-name-username">
           <h3>{data.nombre}</h3> {/* Muestra el nombre del amigo */}
           <p>{data.friend_id}</p> {/* O el username si es necesario */}

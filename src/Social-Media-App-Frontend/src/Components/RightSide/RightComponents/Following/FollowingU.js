@@ -3,6 +3,7 @@ import axios from 'axios'
 import "../Following/FollowingU.css"
 import FollowingUList from './FollowingUList'
 import FollowingMore from './FollowingMore'
+import { API_URL } from '../../../../config/config'
 
 const FollowingU = ({ following, setFollowing }) => {
   const [solicitudes, setSolicitudes] = useState([]) // Estado para almacenar las solicitudes
@@ -14,7 +15,7 @@ const FollowingU = ({ following, setFollowing }) => {
         const token = localStorage.getItem('token') // Obtén el token del almacenamiento local
 
         // Realiza la solicitud a la API para obtener las solicitudes
-        const response = await axios.get('http://localhost:8000/api/amigos/solicitudes', {
+        const response = await axios.get(`${API_URL}/api/amigos/solicitudes`, {
           headers: {
             Authorization: `Bearer ${token}`
           }

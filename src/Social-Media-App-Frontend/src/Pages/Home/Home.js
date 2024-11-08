@@ -7,6 +7,7 @@ import Left from "../../Components/LeftSide/Left";
 import Middle from "../../Components/MiddleSide/Middle";
 import Right from '../../Components/RightSide/Right';
 import Nav from '../../Components/Navigation/Nav';
+import { API_URL } from '../../config/config';
 
 const Home = ({ setFriendsProfile }) => {
     const [posts, setPosts] = useState([]);
@@ -27,7 +28,7 @@ const Home = ({ setFriendsProfile }) => {
               // Obtener el token desde el localStorage
               const token = localStorage.getItem("token");
   
-              const response = await fetch("http://localhost:8000/api/post/listarPostFriends", {
+              const response = await fetch(`${API_URL}/api/post/listarPostFriends`, {
                   method: "GET",
                   headers: {
                       "Authorization": `Bearer ${token}`,
@@ -41,8 +42,8 @@ const Home = ({ setFriendsProfile }) => {
                 const fetchedPosts = data.publicaciones.map(post => ({
                   post_id: post.post_id, // Cambiado de `id: post.post_id`
                   username: post.autor,
-                  profilepicture: post.foto_perfil ? `http://localhost:8000/${post.foto_perfil}`: Profile,
-                  img: post.contenido_url ? `http://localhost:8000/${post.contenido_url}`:null,
+                  profilepicture: post.foto_perfil ? `${API_URL}/${post.foto_perfil}`: Profile,
+                  img: post.contenido_url ? `${API_URL}/${post.contenido_url}`:null,
                   datetime: moment(post.fecha_creacion).fromNow(),
                   body: post.contenido_texto,
                   like: parseInt(post.num_me_gusta),
@@ -65,7 +66,7 @@ const Home = ({ setFriendsProfile }) => {
       if (!token) return;
 
       try {
-        const response = await fetch("http://localhost:8000/api/usuario/perfil", {
+        const response = await fetch(`${API_URL}/api/usuario/perfil`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -79,7 +80,7 @@ const Home = ({ setFriendsProfile }) => {
           setUserName(`@${data.user_id}`);
           
           // Asegúrate de que la URL de la imagen sea accesible desde el frontend
-          setProfileImg(data.foto_perfil ? `http://localhost:8000/${data.foto_perfil}`: Profile );
+          setProfileImg(data.foto_perfil ? `${API_URL}/${data.foto_perfil}`: Profile );
           
           setModelDetails({
             ModelName: data.nombre,

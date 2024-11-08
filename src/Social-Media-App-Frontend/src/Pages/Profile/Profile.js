@@ -5,7 +5,7 @@ import Right from '../../Components/RightSide/Right';
 import Nav from '../../Components/Navigation/Nav';
 import "../Profile/Profile.css";
 import ProfileImg from "../../assets/profile.jpg";
-
+import { API_URL } from '../../config/config';
 const Profile = () => {
   const [following, setFollowing] = useState(3);
   const [search, setSearch] = useState("");
@@ -22,7 +22,7 @@ const Profile = () => {
       if (!token) return;
 
       try {
-        const response = await fetch("http://localhost:8000/api/usuario/perfil", {
+        const response = await fetch(`${API_URL}/api/usuario/perfil`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -36,7 +36,7 @@ const Profile = () => {
           setUserName(`@${data.user_id}`);
           
           // Asegúrate de que la URL de la imagen sea accesible desde el frontend
-          setProfileImg(data.foto_perfil ? `http://localhost:8000/${data.foto_perfil}`: ProfileImg );
+          setProfileImg(data.foto_perfil ? `${API_URL}/${data.foto_perfil}`: ProfileImg );
           
           setModelDetails({
             ModelName: data.nombre,

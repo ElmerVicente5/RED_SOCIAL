@@ -5,6 +5,7 @@ import { FiMail } from "react-icons/fi";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { Link, useNavigate } from 'react-router-dom';
 import validation from './Validation';
+import { API_URL } from '../../config/config';
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -31,7 +32,7 @@ const SignUp = () => {
         if (Object.keys(validation(data)).length === 0) {
             // Make API call to register user
             try {
-                const response = await fetch('http://localhost:8000/api/usuario/registrar', {
+                const response = await fetch(`${API_URL}/api/usuario/registrar`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

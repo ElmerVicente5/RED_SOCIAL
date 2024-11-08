@@ -7,6 +7,7 @@ import PlayCircleFilledOutlinedIcon from '@mui/icons-material/PlayCircleFilledOu
 import KeyboardVoiceRoundedIcon from '@mui/icons-material/KeyboardVoiceRounded';
 import { FaSmile } from "react-icons/fa";
 import axios from "axios";  // Necesitarás axios para hacer solicitudes HTTP
+import { API_URL } from "../../config/config";
 
 const InputPost = ({ handleSubmit, setBody, body, images, setImages }) => {
   const [loading, setLoading] = useState(false);
@@ -27,7 +28,7 @@ const InputPost = ({ handleSubmit, setBody, body, images, setImages }) => {
     }
 
     try {
-      const response = await axios.post('http://localhost:8000/api/post/newPost', formData, {
+      const response = await axios.post(`${API_URL}/api/post/newPost`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${localStorage.getItem('token')}` // Si es necesario, incluye un token de autenticación

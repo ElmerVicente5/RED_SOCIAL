@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import "../Profile/ProfileMiddle.css";
 import moment from 'moment';
 import ProfileInputPost from './ProfileComponents/ProfileInputPost';
+import { API_URL } from '../../config/config';
 
 const ProfileMiddle = ({
   following,
@@ -31,14 +32,14 @@ const ProfileMiddle = ({
 
   useEffect(() => {
     // Llama a la API para obtener las publicaciones del usuario
-    axios.get('http://localhost:8000/api/post/postUser', {
+    axios.get(`${API_URL}/api/post/postUser`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(response => {
       const publicaciones = response.data.publicaciones.map(post => ({
         id: post.post_id,
-        profilepicture: post.foto_perfil ? `http://localhost:8000/${post.foto_perfil}`: Profile,
-        img: post.contenido_url ? `http://localhost:8000/${post.contenido_url}` : null,
+        profilepicture: post.foto_perfil ? `${API_URL}/${post.foto_perfil}`: Profile,
+        img: post.contenido_url ? `${API_URL}/${post.contenido_url}` : null,
         datetime: moment(post.fecha_creacion).fromNow(),
         body: post.contenido_texto,
         like: parseInt(post.num_me_gusta),

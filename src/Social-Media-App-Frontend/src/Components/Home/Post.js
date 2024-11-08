@@ -15,9 +15,10 @@ import img3 from "../../assets/Following/img-4.jpg";
 import Profile from "../../assets/Suggestion/avatar1.png";
 import Comments from '../Comments/Comments';
 
-// Configurar instancia de Axios
+import { API_URL } from '../../config/config';
+
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8000/api/post',
+  baseURL: `${API_URL}api/post`,
   headers: {
     'Authorization': `Bearer ${localStorage.getItem('token')}`
   }
@@ -50,7 +51,7 @@ const Post = ({ post, posts, setPosts, setFriendsProfile, images }) => {
         id: cmt.comment_id,
         username: cmt.usuario,
         comment: cmt.contenido,
-        profilePic: cmt.foto_perfil ?  `http://localhost:8000/${cmt.foto_perfil}`: Profile, // Si no tienes imagen de perfil, puedes agregar una predeterminada
+        profilePic: cmt.foto_perfil ?  `${API_URL}${cmt.foto_perfil}`: Profile, // Si no tienes imagen de perfil, puedes agregar una predeterminada
         time: moment.utc(cmt.fecha_creacion).local().startOf('seconds').fromNow()
       }));
   

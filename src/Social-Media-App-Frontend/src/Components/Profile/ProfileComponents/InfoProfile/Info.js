@@ -10,6 +10,7 @@ import { BiLogOut } from "react-icons/bi";
 import { Link } from 'react-router-dom';
 import ModelProfile from '../ModelProfile/ModelProfile';
 import axios from 'axios';
+import { API_URL } from '../../../../config/config';
 
 const Info = ({
     userPostData,
@@ -77,7 +78,7 @@ const Info = ({
     
         try {
             console.log("Iniciando subida de imagen...");
-            const response = await axios.post("http://localhost:8000/api/usuario/cargar-imagen", formData, {
+            const response = await axios.post(`${API_URL}/api/usuario/cargar-imagen`, formData, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                 },
